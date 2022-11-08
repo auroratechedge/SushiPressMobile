@@ -6,35 +6,54 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import 'react-native-gesture-handler';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useAppSelector} from '../store/storeConfiguration';
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../store/actions/sushi';
 
 type Items = {
-  id: number;
+  id: string;
   img: string;
   name: string;
   price: number;
   included: boolean;
 };
 
-const MenuAlaCarte = ({route}: any) => {
-  const {items} = useAppSelector(state => state.sushiReducer);
-  const [quantity, setQuantity] = useState<any>(0)
+const MenuDetail = ({route}: any) => {
+  const dispatch = useDispatch()
+  const {items, cart} = useAppSelector(state => state.sushiReducer);
+  const [quantity, setQuantity] = useState<any>([])
 
   useEffect(() => {
     //creo un reducer per salvare le quantità quando cambio voce del menu
+    const qnt: any = []
+    items.map((item: Items) => {
+      qnt.push({id: item.id, img: item.img, name: item.name, price:item.price, quantity: 0 })
+    })
+    setQuantity(qnt)
   }, [items])
 
-  const handleAdd = () => {
-    let counter = cloneDeep(quantity);
-    counter = counter + 1;
-    setQuantity(counter);
+  const handleAdd = (itemId: string) => {
+    let updateQuantity = cloneDeep(quantity);
+    let oldQuantity = updateQuantity.find((el: any) => el.id === itemId).quantity
+    updateQuantity.find((el: any) => el.id === itemId).quantity = oldQuantity + 1
+    setQuantity(updateQuantity);
   };
-  const handleRemove = () => {
-    let counter = cloneDeep(quantity);
-    if (counter > 0) {
-      counter = counter - 1;
+  const handleRemove = (itemId: string) => {
+    let updateQuantity = cloneDeep(quantity);
+    let oldQuantity = updateQuantity.find((el: any) => el.id === itemId).quantity
+    if (oldQuantity > 0) {
+      updateQuantity.find((el: any) => el.id === itemId).quantity = oldQuantity - 1
     }
-    setQuantity(counter);
+    setQuantity(updateQuantity);
   };
+
+  const handleAddToCart = (itemId: string) => {
+    //controllo se l'elemento è già presente
+    if (cart.find((el: any) => el.id === itemId)) {
+      dispatch(addToCart(quantity.find((el: any) => el.id === itemId), 'update'))
+    } else {
+      dispatch(addToCart(quantity.find((el: any) => el.id === itemId), 'add'))
+    }
+  }
 
   return (
     <ScrollView>
@@ -58,24 +77,25 @@ const MenuAlaCarte = ({route}: any) => {
               <IconButton
                 icon={<Icon name="plus" />}
                 style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-                onPress={handleAdd}
+                onPress={() => handleAdd(item.id)}
               />
               <Text style={styles.textPeople} >
-                {quantity}
+                {quantity[index]?.quantity}
               </Text>
               <IconButton
                 icon={<Icon name="minus" />}
                 style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-                onPress={handleRemove}
+                onPress={() => handleRemove(item.id)}
               />
             </View>
           </View>
           <View style={{marginTop: 40}}>
           <Button
-            onPress={() => {}}
+            onPress={() => handleAddToCart(item.id)}
             title="Add to cart"
             color="#D3CD00"
             style={{width: 220}}
+            disabled={quantity[index]?.quantity === 0}
             accessibilityLabel="Learn more about this purple button"
           />
           </View>
@@ -131,4 +151,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default MenuAlaCarte;
+export default MenuDetail;

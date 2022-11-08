@@ -1,4 +1,4 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import * as loadingActions from './loading';
 import axios from 'axios';
 
@@ -31,3 +31,13 @@ export const getItems = createAsyncThunk<any, any>(
     }
   },
 );
+
+export const addToCart = createAction(
+  'addToCart',
+  function prepare(cart: any, mode: string) {
+    return {
+      payload: {cart, mode},
+    }
+  },
+)
+

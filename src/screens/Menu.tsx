@@ -1,20 +1,18 @@
 import {
   createDrawerNavigator,
-  DrawerContentScrollView,
   DrawerItem,
-  DrawerItemList,
 } from '@react-navigation/drawer';
-import {DrawerActions, NavigationContainer, useNavigation} from '@react-navigation/native';
+import {DrawerActions} from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import {Image, Text, TouchableHighlight, View} from 'react-native';
 import { Divider } from 'react-native-flex-layout';
 import 'react-native-gesture-handler';
-import Home from './Home';
-import MenuAlaCarte from './MenuAlaCarte';
+import MenuDetail from './MenuDetail';
 import { useDispatch } from "react-redux";
-import { getItems, getListMenu } from '../store/actions/sushi';
+import { getItems } from '../store/actions/sushi';
 import { useAppSelector } from '../store/storeConfiguration';
-import { cloneDeep } from 'lodash';
+import { IconButton } from '@react-native-material/core';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Items = {
   id: number,
@@ -106,7 +104,15 @@ const Menu = ({ navigation, route }: any) => {
           </TouchableHighlight>
         </View>
       )}>
-      <Drawer.Screen name={route.params.name} component={MenuAlaCarte} />
+      <Drawer.Screen name={route.params.name} component={MenuDetail} options={{headerRight: () => (
+        <TouchableHighlight onPress={() => navigation.navigate('Cart', {name: 'Cart'})}>
+          <IconButton 
+            icon={<Icon name="shopping-cart" />}
+            //style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
+            onPress={() => navigation.navigate('Cart', {name: 'Cart'})}
+          />
+        </TouchableHighlight>
+      )}}/>
     </Drawer.Navigator>
   );
 };

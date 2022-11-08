@@ -35,6 +35,7 @@ import {createDrawerNavigator, DrawerItemList} from '@react-navigation/drawer';
 import 'react-native-gesture-handler';
 import {Provider} from 'react-redux';
 import {store} from './src/store/storeConfiguration';
+import Cart from './src/screens/Cart';
 
 const Section: React.FC<
   PropsWithChildren<{
@@ -84,6 +85,7 @@ const App = () => {
           }}>
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Menu" component={Menu} />
+          <Stack.Screen name="Cart" component={Cart} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
