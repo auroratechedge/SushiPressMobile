@@ -75,17 +75,17 @@ const MenuDetail = ({route}: any) => {
             </Text>
             <View style={styles.cardCounter}>
               <IconButton
-                icon={<Icon name="plus" />}
+                icon={<Icon name="minus" />}
                 style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-                onPress={() => handleAdd(item.id)}
+                onPress={() => handleRemove(item.id)}
               />
               <Text style={styles.textPeople} >
                 {quantity[index]?.quantity}
               </Text>
               <IconButton
-                icon={<Icon name="minus" />}
+                icon={<Icon name="plus" />}
                 style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-                onPress={() => handleRemove(item.id)}
+                onPress={() => handleAdd(item.id)}
               />
             </View>
           </View>
@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     margin: 3,
+    marginLeft: 55
   },
   containerPrice: {
     backgroundColor: '#f5f5f5', 

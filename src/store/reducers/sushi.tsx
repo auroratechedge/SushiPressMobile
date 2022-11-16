@@ -1,11 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addToCart, getItems, getListMenu } from "../actions/sushi";
+import { addRemovePeople, addToCart, getItems, getListMenu } from "../actions/sushi";
 
 export type LayoutState = {
   loading: boolean;
   listMenu: any;
   items: any;
   cart: any;
+  people: number;
 };
 
 const initialState: LayoutState = {
@@ -13,6 +14,7 @@ const initialState: LayoutState = {
     loading: false,
     items: [],
     cart: [],
+    people: 0,
 };
 
 export default createReducer(initialState, (builder) => {
@@ -47,6 +49,8 @@ export default createReducer(initialState, (builder) => {
     } else if (action.payload.mode === 'delete') {
       state.cart.splice(state.cart.findIndex((el: any) => el.id === action.payload.cart.id), 1)
     }
-    
+  })
+  .addCase(addRemovePeople, (state, action) => {
+    state.people = action.payload
   })
 });

@@ -4,14 +4,14 @@ import {
 } from '@react-navigation/drawer';
 import {DrawerActions} from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import {Image, Text, TouchableHighlight, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import { Divider } from 'react-native-flex-layout';
 import 'react-native-gesture-handler';
 import MenuDetail from './MenuDetail';
 import { useDispatch } from "react-redux";
-import { getItems } from '../store/actions/sushi';
+import { addToCart, getItems } from '../store/actions/sushi';
 import { useAppSelector } from '../store/storeConfiguration';
-import { IconButton } from '@react-native-material/core';
+import { IconButton, Chip } from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 type Items = {
@@ -25,7 +25,7 @@ type Items = {
 const Menu = ({ navigation, route }: any) => {
   const Drawer = createDrawerNavigator();
   const dispatch: any = useDispatch()
-  const { listMenu } = useAppSelector((state) => state.sushiReducer)
+  const { listMenu, cart } = useAppSelector((state) => state.sushiReducer)
   const [selectedOption, setSelectedOption] = useState<boolean[]>(Array(listMenu.length).fill(false))
 
   useEffect(() => {
@@ -89,7 +89,10 @@ const Menu = ({ navigation, route }: any) => {
                 marginLeft: 5
               }}>{route.params.name}</Text>
           </View>
-          <TouchableHighlight onPress={() => navigation.goBack()}>
+          <TouchableHighlight onPress={() => {
+            dispatch(addToCart([], 'delete'))
+            navigation.goBack()
+            }}>
             <View style={{alignContent: 'center', flexDirection: 'row'}}>
               <Text
                 style={{
@@ -105,16 +108,36 @@ const Menu = ({ navigation, route }: any) => {
         </View>
       )}>
       <Drawer.Screen name={route.params.name} component={MenuDetail} options={{headerRight: () => (
-        <TouchableHighlight onPress={() => navigation.navigate('Cart', {name: 'Cart'})}>
-          <IconButton 
-            icon={<Icon name="shopping-cart" />}
-            //style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-            onPress={() => navigation.navigate('Cart', {name: 'Cart'})}
-          />
+        <TouchableHighlight onPress={() => navigation.navigate('Cart', {name: route.params.name})}>
+            <IconButton 
+              icon={<View style={styles.container}>
+                {cart.length > 0 && <View style={styles.containerCountCart}>
+                  <Text>{cart.length}</Text>
+                </View>}
+                <Icon name="shopping-cart" size={30}/></View>}
+              //style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
+              onPress={() => navigation.navigate('Cart', {name: route.params.name})}
+            />
         </TouchableHighlight>
       )}}/>
     </Drawer.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+    marginBottom: 6
+  },
+  containerCountCart: {
+    backgroundColor: '#ffffb3', 
+    width: 10, 
+    borderRadius: 10, 
+    alignItems: 'center', 
+    marginTop: 5,
+    float: 'right',
+    marginLeft: 20
+  }
+})
 
 export default Menu;

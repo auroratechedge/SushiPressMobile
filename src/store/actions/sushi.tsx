@@ -41,3 +41,12 @@ export const addToCart = createAction(
   },
 )
 
+export const addRemovePeople = createAction(
+  'addRemovePeople',
+  function prepare(people: number) {
+    return {
+      payload: people,
+    }
+  },
+)
+

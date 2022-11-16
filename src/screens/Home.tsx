@@ -12,11 +12,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {cloneDeep} from 'lodash';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../store/storeConfiguration';
-import { getItems, getListMenu } from '../store/actions/sushi';
+import { addRemovePeople, getItems, getListMenu } from '../store/actions/sushi';
 const Home = ({ navigation } : any) => {
-  const [counterPeople, setCounterPeople] = useState(0);
   const dispatch: any = useDispatch()
-  const { listMenu } = useAppSelector((state) => state.sushiReducer)
+  const { people } = useAppSelector(state => state.sushiReducer)
 
   useEffect(() => {
     dispatch(getListMenu())
@@ -24,16 +23,16 @@ const Home = ({ navigation } : any) => {
   }, [dispatch])
 
   const handleAdd = () => {
-    let counter = cloneDeep(counterPeople);
+    let counter = cloneDeep(people);
     counter = counter + 1;
-    setCounterPeople(counter);
+    dispatch(addRemovePeople(counter))
   };
   const handleRemove = () => {
-    let counter = cloneDeep(counterPeople);
+    let counter = cloneDeep(people);
     if (counter > 0) {
       counter = counter - 1;
     }
-    setCounterPeople(counter);
+    dispatch(addRemovePeople(counter))
   };
   
 
@@ -50,18 +49,18 @@ const Home = ({ navigation } : any) => {
             PEOPLE
           </Text>
           <View style={styles.cardCounter}>
-            <IconButton
-              icon={<Icon name="plus" />}
-              style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-              onPress={handleAdd}
-            />
-            <Text style={styles.textPeople} variant="h6">
-              {counterPeople}
-            </Text>
-            <IconButton
+          <IconButton
               icon={<Icon name="minus" />}
               style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
               onPress={handleRemove}
+            />
+            <Text style={styles.textPeople} variant="h6">
+              {people}
+            </Text>
+             <IconButton
+              icon={<Icon name="plus" />}
+              style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
+              onPress={handleAdd}
             />
           </View>
         </View>
