@@ -13,6 +13,7 @@ import {cloneDeep} from 'lodash';
 import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../store/storeConfiguration';
 import { addRemovePeople, getItems, getListMenu } from '../store/actions/sushi';
+
 const Home = ({ navigation } : any) => {
   const dispatch: any = useDispatch()
   const { people } = useAppSelector(state => state.sushiReducer)
@@ -64,10 +65,11 @@ const Home = ({ navigation } : any) => {
             />
           </View>
         </View>
-          <TouchableHighlight onPress={() => {
-            navigation.navigate('Menu', {name: 'A la carte'})
-            }}>
-            <View style={styles.boxCard}>
+          <TouchableHighlight 
+            onPress={() => {navigation.navigate('Menu', {name: 'A la carte'})}}
+            disabled={people === 0}
+          >
+            <View style={{padding: 10, opacity: people === 0 ? 0.5 : 1}}>
               <View style={styles.circle}>
                 <Image
                   source={require('./../assets/images/alacarte.png')}
@@ -84,8 +86,11 @@ const Home = ({ navigation } : any) => {
               </View>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight onPress={() => {navigation.navigate('Menu', {name: 'All you can eat'})}}>
-            <View style={styles.boxCard}>
+          <TouchableHighlight 
+            onPress={() => {navigation.navigate('Menu', {name: 'All you can eat'})}}
+            disabled={people === 0}
+          >
+            <View style={{padding: 10, opacity: people === 0 ? 0.5 : 1}}>
               <View style={styles.circle}>
                 <Image
                   source={require('./../assets/images/allyoucaneat.png')}
@@ -118,9 +123,6 @@ const styles = StyleSheet.create({
   },
   card: {
     alignItems: 'center',
-  },
-  boxCard: {
-    padding: 10,
   },
   circle: {
     width: 200,

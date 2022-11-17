@@ -48,6 +48,8 @@ export default createReducer(initialState, (builder) => {
       state.cart = [...state.cart, action.payload.cart]
     } else if (action.payload.mode === 'delete') {
       state.cart.splice(state.cart.findIndex((el: any) => el.id === action.payload.cart.id), 1)
+    } else if (action.payload.mode === 'deleteAll') {
+      state.cart = []
     }
   })
   .addCase(addRemovePeople, (state, action) => {

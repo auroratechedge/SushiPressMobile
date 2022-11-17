@@ -32,6 +32,7 @@ const Menu = ({ navigation, route }: any) => {
     const optionsTMP = selectedOption
     optionsTMP[0] = true
     setSelectedOption(optionsTMP)
+    dispatch(getItems(listMenu[0].id))
   }, [listMenu])
 
   const handleOptionMenu = (item: any, index: number) => {
@@ -90,7 +91,7 @@ const Menu = ({ navigation, route }: any) => {
               }}>{route.params.name}</Text>
           </View>
           <TouchableHighlight onPress={() => {
-            dispatch(addToCart([], 'delete'))
+            dispatch(addToCart([], 'deleteAll'))
             navigation.goBack()
             }}>
             <View style={{alignContent: 'center', flexDirection: 'row'}}>

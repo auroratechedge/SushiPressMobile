@@ -15,19 +15,16 @@ const Cart = ({navigation, route}: any) => {
   const priceAllYouCanEat = 12.90
 
   useEffect(() => {
-    console.debug("route: ", route)
-  }, [route])
-
-  useEffect(() => {
-    console.debug('cart: ', cart);
     if (route.params.name === "A la carte") {
       let total = 0
       cart.map((el: any) => {
         total += el.price * el.quantity
       })
       setTotalALaCarte(total)
-    } else {
+    } else if (cart.length > 0) {
       setTotalAllYouCanEat((priceAllYouCanEat * people))
+    } else if (cart.length === 0) {
+      setTotalAllYouCanEat(0)
     }
     
   }, [cart]);
