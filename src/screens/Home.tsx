@@ -46,19 +46,21 @@ const Home = ({ navigation } : any) => {
             style={{width: 150, height: 150}}
           />
           <View style={styles.cardPeople}>
-          <Text variant="h6" style={{alignItems: 'center'}}>
+          <Text testID="people" variant="h6" style={{alignItems: 'center'}}>
             PEOPLE
           </Text>
           <View style={styles.cardCounter}>
-          <IconButton
+            <IconButton
+              testID="counter-people-add"
               icon={<Icon name="minus" />}
               style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
               onPress={handleRemove}
             />
-            <Text style={styles.textPeople} variant="h6">
+            <Text testID="counter-people" style={styles.textPeople} variant="h6">
               {people}
             </Text>
              <IconButton
+              testID="counter-people-remove"
               icon={<Icon name="plus" />}
               style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
               onPress={handleAdd}
