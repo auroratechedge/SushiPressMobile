@@ -1,20 +1,22 @@
 import {IconButton, Text, Button} from '@react-native-material/core';
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Alert, Image, Modal, Pressable, StyleSheet, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useAppSelector} from '../store/storeConfiguration';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
-import {addToCart} from '../store/actions/sushi';
+import {addToCart, sendOrder} from '../store/actions/sushi';
 
 const Cart = ({navigation, route}: any) => {
   const dispatch = useDispatch();
-  const { cart, people } = useAppSelector(state => state.sushiReducer);
+  const { cart, people, send } = useAppSelector(state => state.sushiReducer);
   const [totalALaCarte, setTotalALaCarte] = useState<number>(0)
   const [totalAllYouCanEat, setTotalAllYouCanEat] = useState<number>(0)
   const priceAllYouCanEat = 12.90
+  const [modalSuccessVisible, setModalSucccessVisible] = useState<boolean>(false)
 
   useEffect(() => {
+    console.debug("cart: ", cart)
     if (route.params.name === "A la carte") {
       let total = 0
       cart.map((el: any) => {
@@ -29,6 +31,12 @@ const Cart = ({navigation, route}: any) => {
     
   }, [cart]);
 
+  useEffect(() => {
+    if (send) {
+      setModalSucccessVisible(true)
+    }
+  }, [send])
+
   const handleDelete = (itemId: string) => {
     dispatch(
       addToCart(
@@ -41,12 +49,13 @@ const Cart = ({navigation, route}: any) => {
   return (
     <ScrollView stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <IconButton
-          icon={<Icon name="arrow-left" size={20} />}
-          //style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-          onPress={() => navigation.goBack()}
-        />
-        <Text style={styles.headerLabel}>{route.name}</Text>
+        <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+          <IconButton
+            icon={<Icon name="arrow-left" size={20} />}
+            onPress={() => navigation.goBack()}
+          />
+          <Text style={styles.headerLabel}>{route.name}</Text>
+        </View>
       </View>
       <View style={{alignItems: 'center', marginTop: 10}}>
         {cart.length > 0 ? (
@@ -78,12 +87,39 @@ const Cart = ({navigation, route}: any) => {
       </View>
       <View style={{alignItems: 'center'}}>
         <Button
-          onPress={() => {}}
+          onPress={() => dispatch(sendOrder(true))}
           title="Send order"
           color="#D3CD00"
           style={{width: 220}}
         />
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalSuccessVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          dispatch(sendOrder(false))
+          dispatch(addToCart([], 'deleteAll'))
+          setModalSucccessVisible(!modalSuccessVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Order send successfully</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => {
+                dispatch(sendOrder(false))
+                dispatch(addToCart([], 'deleteAll'))
+                setModalSucccessVisible(!modalSuccessVisible)
+              }}
+            >
+              <Text style={styles.textStyle}>Close</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -120,6 +156,47 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginBottom: 20,
     marginTop: 20
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    borderRadius: 10,
+    padding: 10,
+    elevation: 2
+  },
+  buttonOpen: {
+    backgroundColor: "#D3CD00",
+  },
+  buttonClose: {
+    backgroundColor: "#D3CD00",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
   }
 });
 

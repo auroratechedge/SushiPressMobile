@@ -68,6 +68,7 @@ const Home = ({ navigation } : any) => {
           </View>
         </View>
           <TouchableHighlight 
+            testID='menulacarte'
             onPress={() => {navigation.navigate('Menu', {name: 'A la carte'})}}
             disabled={people === 0}
           >
@@ -89,6 +90,7 @@ const Home = ({ navigation } : any) => {
             </View>
           </TouchableHighlight>
           <TouchableHighlight 
+            testID='menuallyoucaneat'
             onPress={() => {navigation.navigate('Menu', {name: 'All you can eat'})}}
             disabled={people === 0}
           >

@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { addRemovePeople, addToCart, getItems, getListMenu } from "../actions/sushi";
+import { addRemovePeople, addToCart, getItems, getListMenu, sendOrder } from "../actions/sushi";
 
 export type LayoutState = {
   loading: boolean;
@@ -7,6 +7,7 @@ export type LayoutState = {
   items: any;
   cart: any;
   people: number;
+  send: boolean;
 };
 
 const initialState: LayoutState = {
@@ -15,6 +16,7 @@ const initialState: LayoutState = {
     items: [],
     cart: [],
     people: 0,
+    send: false,
 };
 
 export default createReducer(initialState, (builder) => {
@@ -54,5 +56,9 @@ export default createReducer(initialState, (builder) => {
   })
   .addCase(addRemovePeople, (state, action) => {
     state.people = action.payload
+  })
+  .addCase(sendOrder, (state, action) => {
+    state.send = action.payload
+    state.loading = false
   })
 });

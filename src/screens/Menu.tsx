@@ -53,7 +53,7 @@ const Menu = ({ navigation, route }: any) => {
               style={{width: 150, height: 150}}
             />
           </View>
-          <View style={{alignContent: 'center'}}>
+          <View style={{alignContent: 'center'}} testID='optionMenu'>
             {listMenu?.map((item: any, index: number) => (
               <DrawerItem
                 key={item.id}

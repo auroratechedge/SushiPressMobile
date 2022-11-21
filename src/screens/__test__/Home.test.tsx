@@ -16,6 +16,12 @@ jest.mock('react-redux', () => ({
 const addPeople = jest.fn((x => x + 1));
 const removePeople = jest.fn((x => x - 1));
 
+const mockNavigation = jest.fn()
+
+const fakeNavigation = {
+    navigate: mockNavigation,
+}
+
 const setup = () => {
   render(
     <Provider store={store}>
@@ -58,6 +64,22 @@ describe('Home screen', () => {
         fireEvent.press(removePeopleButton, {target: {value: removePeople(1)}})
         expect(removePeople.mock.results[0].value).toBe(0);
     });
+})
+
+describe('Home screen', () => {
+    test("Rendering of Menu la carte", async () => {
+        const alacarteButton = screen.getByTestId('menulacarte')
+        fireEvent.press(alacarteButton, {target: {value: mockNavigation('Menu', {name: 'A la carte'})}})
+        expect(fakeNavigation.navigate).toBeCalledWith('Menu', {name: 'A la carte'})
+    })
+})
+
+describe('Home screen', () => {
+    test("Rendering of Menu all you can eat", async () => {
+        const alacarteButton = screen.getByTestId('menuallyoucaneat')
+        fireEvent.press(alacarteButton, {target: {value: mockNavigation('Menu', {name: 'All you can eat'})}})
+        expect(fakeNavigation.navigate).toBeCalledWith('Menu', {name: 'All you can eat'})
+    })
 })
 
 afterEach(() => {
