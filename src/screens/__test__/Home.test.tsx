@@ -7,20 +7,12 @@ import { store } from '../../store/storeConfiguration';
 const mockDispatch = jest.fn();
 // const mockSelector = jest.fn()
 
+//questo serve per la presenza delle chiamate redux
 jest.mock('react-redux', () => ({
     ...jest.requireActual('react-redux'),
     useDispatch: () => mockDispatch
     // useSelector: () => mockSelector.mockReturnValueOnce(true)
 }))
-
-const addPeople = jest.fn((x => x + 1));
-const removePeople = jest.fn((x => x - 1));
-
-const mockNavigation = jest.fn()
-
-const fakeNavigation = {
-    navigate: mockNavigation,
-}
 
 const setup = () => {
   render(
@@ -31,6 +23,7 @@ const setup = () => {
 }
 
 beforeEach(() => {
+  mockDispatch.mockClear()
   setup()
 })
 
@@ -49,37 +42,35 @@ describe('Home screen', () => {
 
 describe('Home screen', () => {
     test("add one people to order", async () => {
-        const addPeopleButton = screen.getByTestId('counter-people-add')
-        fireEvent.press(addPeopleButton, {target: {value: addPeople(0)}})
-        expect(addPeople.mock.results[0].value).toBe(1);
+        const addPeopleButton = screen.getByTestId("counter-people-add")
+        const boxCounterPeople = screen.getByTestId("counter-people")
+        expect(boxCounterPeople.props.children).toBe(0);
+        fireEvent.press(addPeopleButton)
+        expect(boxCounterPeople.props.children).toBe(1);
+    });
+})
+
+describe('Home screen', () => {
+    test("add two people to order", async () => {
+        const addPeopleButton = screen.getByTestId("counter-people-add")
+        const boxCounterPeople = screen.getByTestId("counter-people")
+        expect(boxCounterPeople.props.children).toBe(0);
+        fireEvent.press(addPeopleButton)
+        fireEvent.press(addPeopleButton)
+        expect(boxCounterPeople.props.children).toBe(2);
     });
 })
 
 describe('Home screen', () => {
     test("remove one people to order after added one", async () => {
+        const boxCounterPeople = screen.getByTestId("counter-people")
         const addPeopleButton = screen.getByTestId('counter-people-add')
-        fireEvent.press(addPeopleButton, {target: {value: addPeople(0)}})
-        expect(addPeople.mock.results[0].value).toBe(1);
         const removePeopleButton = screen.getByTestId('counter-people-remove')
-        fireEvent.press(removePeopleButton, {target: {value: removePeople(1)}})
-        expect(removePeople.mock.results[0].value).toBe(0);
+        fireEvent.press(addPeopleButton)
+        expect(boxCounterPeople.props.children).toBe(1);
+        fireEvent.press(removePeopleButton)
+        expect(boxCounterPeople.props.children).toBe(0);
     });
-})
-
-describe('Home screen', () => {
-    test("Rendering of Menu la carte", async () => {
-        const alacarteButton = screen.getByTestId('menulacarte')
-        fireEvent.press(alacarteButton, {target: {value: mockNavigation('Menu', {name: 'A la carte'})}})
-        expect(fakeNavigation.navigate).toBeCalledWith('Menu', {name: 'A la carte'})
-    })
-})
-
-describe('Home screen', () => {
-    test("Rendering of Menu all you can eat", async () => {
-        const alacarteButton = screen.getByTestId('menuallyoucaneat')
-        fireEvent.press(alacarteButton, {target: {value: mockNavigation('Menu', {name: 'All you can eat'})}})
-        expect(fakeNavigation.navigate).toBeCalledWith('Menu', {name: 'All you can eat'})
-    })
 })
 
 afterEach(() => {

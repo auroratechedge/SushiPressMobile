@@ -1,28 +1,22 @@
 import React from 'react';
 import { render, fireEvent, screen } from "@testing-library/react-native";
 import { Provider, useSelector } from 'react-redux';
+import * as reactRedux from 'react-redux'
 import { store } from '../../store/storeConfiguration';
 import Cart from '../Cart';
+import { createAction } from '@reduxjs/toolkit';
 
-const mockDispatch = jest.fn()
-const mockSelector = jest.fn().mockReturnValue([{
-    id: "1a",
-    name: "Avocado Maki",
-    price: 4,
-    quantity: 1
-}])
 
-jest.mock('react-redux', () => ({
-    ...jest.requireActual('react-redux'),
-    useDispatch: () => mockDispatch,
-    useSelector: () => mockSelector
-}))
+
+const mockMethod = jest.fn()
+
+
 
 const setup = () => {
     render(
-        <Cart />
+        <Cart route={{name: 'Cart'}}/>
     );
-  }
+}
   
 beforeEach(() => {
     setup()
@@ -30,10 +24,22 @@ beforeEach(() => {
 
 describe('Cart screen', () => {
     test("count all text element", async () => {
-        console.log('rusultato: ', mockSelector.mock.results[0].value)
+        
     })
 })
 
 afterEach(() => {
-    mockSelector.mockClear();
 });
+
+
+
+
+
+
+
+
+
+//mocco gli elementi del carrello, per testare l'elimina mi creo anche la funzione dello splice
+//altro testi vedo in base a gli elementi che ho inserito quanto fa il totale
+
+//ci starebbe testare il drawer navigation

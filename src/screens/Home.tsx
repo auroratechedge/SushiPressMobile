@@ -10,32 +10,37 @@ import {
 import {IconButton, Text} from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {cloneDeep} from 'lodash';
-import { useDispatch } from 'react-redux';
-import { useAppSelector } from '../store/storeConfiguration';
-import { addRemovePeople, getItems, getListMenu } from '../store/actions/sushi';
+import {useDispatch} from 'react-redux';
+import {useAppSelector} from '../store/storeConfiguration';
+import {addRemovePeople, getItems, getListMenu} from '../store/actions/sushi';
 
-const Home = ({ navigation } : any) => {
-  const dispatch: any = useDispatch()
-  const { people } = useAppSelector(state => state.sushiReducer)
+const Home = ({navigation}: any) => {
+  const dispatch: any = useDispatch();
+  const {people} = useAppSelector(state => state.sushiReducer);
+  const [peopleState, setPeopleState] = React.useState<number>(0);
 
   useEffect(() => {
-    dispatch(getListMenu())
-    dispatch(getItems(1))
-  }, [dispatch])
+    dispatch(getListMenu());
+    dispatch(getItems(1));
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(addRemovePeople(peopleState));
+  }, [peopleState]);
 
   const handleAdd = () => {
-    let counter = cloneDeep(people);
+    let counter = cloneDeep(peopleState);
     counter = counter + 1;
-    dispatch(addRemovePeople(counter))
+    setPeopleState(counter);
   };
+
   const handleRemove = () => {
-    let counter = cloneDeep(people);
+    let counter = cloneDeep(peopleState);
     if (counter > 0) {
       counter = counter - 1;
     }
-    dispatch(addRemovePeople(counter))
+    setPeopleState(counter);
   };
-  
 
   return (
     <SafeAreaView style={styles.container}>
@@ -46,32 +51,36 @@ const Home = ({ navigation } : any) => {
             style={{width: 150, height: 150}}
           />
           <View style={styles.cardPeople}>
-          <Text testID="people" variant="h6" style={{alignItems: 'center'}}>
-            PEOPLE
-          </Text>
-          <View style={styles.cardCounter}>
-            <IconButton
-              testID="counter-people-add"
-              icon={<Icon name="minus" />}
-              style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-              onPress={handleRemove}
-            />
-            <Text testID="counter-people" style={styles.textPeople} variant="h6">
-              {people}
+            <Text testID="people" variant="h6" style={{alignItems: 'center'}}>
+              PEOPLE
             </Text>
-             <IconButton
-              testID="counter-people-remove"
-              icon={<Icon name="plus" />}
-              style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
-              onPress={handleAdd}
-            />
+            <View style={styles.cardCounter}>
+              <IconButton
+                testID="counter-people-remove"
+                icon={<Icon name="minus" />}
+                style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
+                onPress={handleRemove}
+              />
+              <Text
+                testID="counter-people"
+                style={styles.textPeople}
+                variant="h6">
+                {peopleState}
+              </Text>
+              <IconButton
+                testID="counter-people-add"
+                icon={<Icon name="plus" />}
+                style={{borderRadius: 60, backgroundColor: '#D3CD00'}}
+                onPress={handleAdd}
+              />
+            </View>
           </View>
-        </View>
-          <TouchableHighlight 
-            testID='menulacarte'
-            onPress={() => {navigation.navigate('Menu', {name: 'A la carte'})}}
-            disabled={people === 0}
-          >
+          <TouchableHighlight
+            testID="menulacarte"
+            onPress={() => {
+              navigation.navigate('Menu', {name: 'A la carte'});
+            }}
+            disabled={people === 0}>
             <View style={{padding: 10, opacity: people === 0 ? 0.5 : 1}}>
               <View style={styles.circle}>
                 <Image
@@ -89,11 +98,12 @@ const Home = ({ navigation } : any) => {
               </View>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight 
-            testID='menuallyoucaneat'
-            onPress={() => {navigation.navigate('Menu', {name: 'All you can eat'})}}
-            disabled={people === 0}
-          >
+          <TouchableHighlight
+            testID="menuallyoucaneat"
+            onPress={() => {
+              navigation.navigate('Menu', {name: 'All you can eat'});
+            }}
+            disabled={people === 0}>
             <View style={{padding: 10, opacity: people === 0 ? 0.5 : 1}}>
               <View style={styles.circle}>
                 <Image
