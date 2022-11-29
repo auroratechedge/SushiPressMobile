@@ -47,7 +47,7 @@ const Cart = ({navigation, route}: any) => {
   };
 
   return (
-    <ScrollView stickyHeaderIndices={[0]} showsVerticalScrollIndicator={false}>
+    <View>
       <View style={styles.header}>
         <View style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <IconButton
@@ -57,7 +57,8 @@ const Cart = ({navigation, route}: any) => {
           <Text style={styles.headerLabel}>{route.name}</Text>
         </View>
       </View>
-      <View style={{alignItems: 'center', marginTop: 10}}>
+      <View style={{alignItems: 'center', marginTop: 10, height: '75%'}}>
+        <ScrollView showsVerticalScrollIndicator={false}>
         {cart.length > 0 ? (
           cart?.map((element: any) => (
             <View key={element.id} style={styles.itemContainer}>
@@ -81,17 +82,21 @@ const Cart = ({navigation, route}: any) => {
         ) : (
           <Text>Cart is empty</Text>
         )}
+        <View></View>
+        </ScrollView>
       </View>
-      <View style={styles.containerTotalOrder}>
-        <Text>Total order: {route.params.name === "A la carte" ? totalALaCarte : totalAllYouCanEat} €</Text>
-      </View>
-      <View style={{alignItems: 'center'}}>
-        <Button
-          onPress={() => dispatch(sendOrder(true))}
-          title="Send order"
-          color="#D3CD00"
-          style={{width: 220}}
-        />
+      <View>
+        <View style={styles.containerTotalOrder}>
+          <Text>Total order: {route.params.name === "A la carte" ? totalALaCarte : totalAllYouCanEat} €</Text>
+        </View>
+        <View style={{alignItems: 'center'}}>
+          <Button
+            onPress={() => dispatch(sendOrder(true))}
+            title="Send order"
+            color="#D3CD00"
+            style={{width: 220}}
+          />
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -120,7 +125,7 @@ const Cart = ({navigation, route}: any) => {
           </View>
         </View>
       </Modal>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -150,7 +155,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: 'center',
     marginTop: 5,
-    marginLeft: 290,
+    marginLeft: 250,
+    marginRight: 20
   },
   containerTotalOrder: {
     marginLeft: 20,
