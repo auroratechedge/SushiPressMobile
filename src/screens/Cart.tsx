@@ -148,9 +148,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     marginBottom: 10,
+    borderRadius: 60
   },
   containerTrashBtn: {
-    backgroundColor: '#f5f5f5',
+    //backgroundColor: '#f5f5f5',
     width: 50,
     borderRadius: 20,
     alignItems: 'center',
