@@ -4,8 +4,8 @@ import {
   SafeAreaView,
   StyleSheet,
   View,
-  TouchableHighlight,
   ScrollView,
+  Pressable,
 } from 'react-native';
 import {IconButton, Text} from '@react-native-material/core';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -75,7 +75,7 @@ const Home = ({navigation}: any) => {
               />
             </View>
           </View>
-          <TouchableHighlight
+          <Pressable
             testID="menulacarte"
             onPress={() => {
               navigation.navigate('Menu', {name: 'A la carte'});
@@ -97,8 +97,8 @@ const Home = ({navigation}: any) => {
                 </View>
               </View>
             </View>
-          </TouchableHighlight>
-          <TouchableHighlight
+          </Pressable>
+          <Pressable
             testID="menuallyoucaneat"
             onPress={() => {
               navigation.navigate('Menu', {name: 'All you can eat'});
@@ -120,7 +120,7 @@ const Home = ({navigation}: any) => {
                 </View>
               </View>
             </View>
-          </TouchableHighlight>
+          </Pressable>
         </View>
       </ScrollView>
     </SafeAreaView>
